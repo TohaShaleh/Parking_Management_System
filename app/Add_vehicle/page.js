@@ -4,24 +4,69 @@ import React, { useState } from "react";
 
 function Page() {
   const [vehicleType, setVehicleType] = useState("");
+  const [licenseNumber, setLicenseNumber] = useState("");
+  const [ownerName, setOwnerName] = useState("");
+  const [ownerPhone, setOwnerPhone] = useState("");
+  const [status, setStatus] = useState("");
+  const [address, setAddress] = useState("");
+  const [entryTime, setEntryTime] = useState("");
+  const [exitTime, setExitTime] = useState("");
+  const [parkingCharge, setParkingCharge] = useState("");
 
-  const handleChange = (event) => {
-    setVehicleType(event.target.value); // Corrected typo
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    // Collect form data
+    const newVehicle = {
+      licenseNumber,
+      vehicleType,
+      ownerName,
+      ownerPhone,
+      status,
+      address,
+      entryTime,
+      exitTime,
+      parkingCharge
+    };
+
+    // Get existing vehicles from local storage
+    const savedVehicles = JSON.parse(localStorage.getItem("vehicles")) || [];
+
+    // Add new vehicle and save to local storage
+    savedVehicles.push(newVehicle);
+    localStorage.setItem("vehicles", JSON.stringify(savedVehicles));
+
+    // Optionally clear form fields
+    setLicenseNumber("");
+    setVehicleType("");
+    setOwnerName("");
+    setOwnerPhone("");
+    setStatus("");
+    setAddress("");
+    setEntryTime("");
+    setExitTime("");
+    setParkingCharge("");
   };
 
   return (
     <>
       <div className="bg-slate-400 flex flex-col items-center justify-center min-h-screen">
+
+        <div className="mt-0 w-full">
         <h1 className="bg-blue-500 p-5 text-4xl text-white text-center w-full rounded-md">
           Parking Management System
         </h1>
-        <form action="" className="bg-white shadow-md rounded-lg p-10 mt-10 w-3/4">
+        </div>
+        
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-10 mt-10 w-3/4">
           <div className="flex flex-wrap items-center mb-6">
             <label htmlFor="license-number" className="block w-full md:w-1/2 mb-2">
               Vehicle License Number:
             </label>
             <input
               id="license-number"
+              value={licenseNumber}
+              onChange={(e) => setLicenseNumber(e.target.value)}
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
               type="number"
               required
@@ -35,9 +80,8 @@ function Page() {
             </label>
             <select
               id="vehicle-type"
-              name="vehicle-type"
               value={vehicleType}
-              onChange={handleChange}
+              onChange={(e) => setVehicleType(e.target.value)}
               required
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
             >
@@ -54,6 +98,8 @@ function Page() {
             </label>
             <input
               id="owner-name"
+              value={ownerName}
+              onChange={(e) => setOwnerName(e.target.value)}
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
               type="text"
               required
@@ -67,6 +113,8 @@ function Page() {
             </label>
             <input
               id="owner-phone"
+              value={ownerPhone}
+              onChange={(e) => setOwnerPhone(e.target.value)}
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
               type="text"
               required
@@ -79,8 +127,9 @@ function Page() {
               Status:
             </label>
             <select
-              name="status"
               id="status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
               required
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
             >
@@ -96,6 +145,8 @@ function Page() {
             </label>
             <textarea
               id="address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               rows="4"
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
               placeholder="Enter the address"
@@ -109,7 +160,8 @@ function Page() {
             <input
               type="datetime-local"
               id="entry-time"
-              name="entry-time"
+              value={entryTime}
+              onChange={(e) => setEntryTime(e.target.value)}
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
             />
           </div>
@@ -121,7 +173,8 @@ function Page() {
             <input
               type="datetime-local"
               id="exit-time"
-              name="exit-time"
+              value={exitTime}
+              onChange={(e) => setExitTime(e.target.value)}
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
             />
           </div>
@@ -133,7 +186,8 @@ function Page() {
             <input
               type="number"
               id="parking-charge"
-              name="parking-charge"
+              value={parkingCharge}
+              onChange={(e) => setParkingCharge(e.target.value)}
               min="0"
               placeholder="Enter the parking charge"
               className="p-3 w-full md:w-1/2 border border-gray-300 rounded"
