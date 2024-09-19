@@ -65,10 +65,11 @@ function ParkingList() {
       </div>
 
       {/* Parking Capacity Block */}
-      <div className="bg-white shadow-md rounded-lg p-10 mt-5 w-3/4">
+      <div className="bg-white shadow-md rounded-lg p-10 mt-5 w-3/4 ">
         <h2 className="text-2xl font-bold mb-4">Parking Overview</h2>
         <p className="text-lg">Total Capacity: {totalCapacity}</p>
         <p className="text-lg">Available Slots: {availableSlots}</p>
+        <p className="text-lg">Total Vehicles Parked: {totalCapacity - availableSlots}</p>
         <div className="mt-4">
           <h3 className="text-lg font-semibold">Vehicle Type Count:</h3>
           <ul className="list-disc pl-5">
@@ -87,17 +88,28 @@ function ParkingList() {
         {vehiclesOverOneHour.length === 0 ? (
           <p className="text-lg">No vehicles have been parked for over 1 hour.</p>
         ) : (
-          <ul className="list-disc pl-5">
-            {vehiclesOverOneHour.map((vehicle, index) => (
-              <li key={index} className="text-lg">
-                {vehicle.ownerName} - {vehicle.licenseNumber}
-              </li>
-            ))}
-          </ul>
+          <table className="min-w-full divide-y divide-gray-200 ">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Owner Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle License Number</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entry Time</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exit Time</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {vehiclesOverOneHour.map((vehicle, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{vehicle.ownerName}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{vehicle.licenseNumber}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(vehicle.entryTime).toLocaleString()}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{vehicle.exitTime ? new Date(vehicle.exitTime).toLocaleString() : 'N/A'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
-
-      {/* Optionally you can add the vehicle list display */}
     </div>
   );
 }
